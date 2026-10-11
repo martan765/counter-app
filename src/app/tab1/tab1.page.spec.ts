@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SavedCounter } from '../models/saved-counter';
+import { CounterService } from '../services/counter.service';
 import { Tab1Page } from './tab1.page';
 
 describe('Tab1Page', () => {
@@ -17,21 +18,20 @@ describe('Tab1Page', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add the newest saved counter to the beginning', () => {
-    const first: SavedCounter = {
+  it('should save a counter through CounterService', async () => {
+    const counter: SavedCounter = {
       id: 'first',
       name: 'První',
       value: 1,
+      createdAt: '2026-09-17T08:00:00.000Z',
     };
-    const second: SavedCounter = {
-      id: 'second',
-      name: 'Druhé',
-      value: 2,
-    };
+    const counterService = TestBed.inject(CounterService);
+    const addSpy = vi
+      .spyOn(counterService, 'add')
+      .mockResolvedValue(undefined);
 
-    component.onSaved(first);
-    component.onSaved(second);
+    await component.onSaved(counter);
 
-    expect(component.savedCounters).toEqual([second, first]);
+    expect(addSpy).toHaveBeenCalledWith(counter);
   });
 });
