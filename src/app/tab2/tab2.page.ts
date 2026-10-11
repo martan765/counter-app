@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   AlertController,
   IonButton,
@@ -28,6 +28,7 @@ type SortOption = 'newest' | 'oldest' | 'name' | 'value';
   styleUrls: ['tab2.page.scss'],
   imports: [
     DatePipe,
+    DecimalPipe,
     IonButton,
     IonContent,
     IonHeader,
@@ -54,6 +55,11 @@ export class Tab2Page implements OnInit {
   readonly totalValue = computed(() =>
     this.counterService.counters().reduce((total, counter) => total + counter.value, 0),
   );
+
+  readonly averageValue = computed(() => {
+    const counters = this.counterService.counters();
+    return counters.length === 0 ? 0 : this.totalValue() / counters.length;
+  });
 
   readonly visibleCounters = computed(() => {
     const search = this.searchTerm().trim().toLocaleLowerCase();

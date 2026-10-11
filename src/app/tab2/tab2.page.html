@@ -17,6 +17,7 @@
       <div>
         <p>Počet záznamů: {{ counterService.counters().length }}</p>
         <p>Součet hodnot: {{ totalValue() }}</p>
+        <p>Průměr hodnot: {{ averageValue() | number: '1.0-2' }}</p>
       </div>
       <ion-button color="danger" fill="outline" size="small" (click)="clear()">
         Vymazat vše
